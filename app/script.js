@@ -294,7 +294,7 @@ function showQuestions(index) {
 function optionSelected(answer) {
   clearInterval(counter);
   clearInterval(counterLine);
-  let userAns = answer.textContent;
+  let userAns = answer.querySelector('.question').textContent;
   let correcAns = round[que_count].answer;
   // const allOptions = option_list.children.length;
 
@@ -306,7 +306,7 @@ function optionSelected(answer) {
     answer.classList.add("incorrect");
     answer.insertAdjacentHTML("beforeend", crossIconTag);
     for (i = 0; i < option_list.children.length; i++) {
-      if (option_list.children[i].textContent == correcAns) {
+      if (option_list.children[i].querySelector('.question').textContent == correcAns) {
         option_list.children[i].setAttribute("class", "option correct");
         option_list.children[i].insertAdjacentHTML("beforeend", tickIconTag);
       }
