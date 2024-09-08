@@ -1,5 +1,4 @@
 let questions = [
-    // Poluição dos Oceanos
     {
         numb: 1,
         question: "Qual é a principal fonte de poluição plástica nos oceanos?",

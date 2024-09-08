@@ -93,10 +93,6 @@ function setDark() {
   document.documentElement.style.setProperty('--option-border', '#6e6e6e86');
 }
 
-// match.addEventListener('change', (e) => {
-//     e.matches ? setDark() : setLight();
-// });
-
 var match = window.matchMedia('(prefers-color-scheme: dark)');
 if (match.matches === true) {
   setDark();
@@ -139,7 +135,7 @@ continue_btn.onclick = () => {
   info_box.classList.remove("activeInfo");
   quiz_box.classList.add("activeQuiz");
   // loadQuestion();
-  showQuestions(0)
+  showQuestions(0);
   queCounter(1);
   startTimer(30);
   startTimerLine(1);
@@ -152,10 +148,8 @@ restart_quiz.onclick = () => {
   timeValue = 30;
   que_count = 0;
   que_numb = 1;
-  userScore = 0;
   widthValue = 1;
-  save = false;
-  // loadQuestion();
+  showQuestions(0);
   queCounter(que_numb);
   clearInterval(counter);
   clearInterval(counterLine);
@@ -200,31 +194,6 @@ next_btn.onclick = () => {
     showResult();
   }
 }
-// save_btn.onclick = () => {
-//   user_box.classList.add("activeUser");
-//   result_box.classList.remove("activeResult");
-// }
-
-// keep_btn.onclick = () => {
-//   const required_user = document.getElementById("requireduser");
-//   const required = document.getElementById("required");
-
-//   if (save == false && userInput.value != "" && emailInput.value != "") {
-//     saveUser();
-//     save = true;
-//   }
-//   else if (userInput.value == "") {
-//     required_user.style.display = 'flex';
-//     required.style.display = 'none';
-//   } else if (emailInput.value == "") {
-//     required_user.style.display = 'none';
-//     required.style.display = 'flex';
-//   }
-//   if (!userInput.value && !emailInput.value) {
-//     required_user.style.display = 'flex';
-//     required.style.display = 'flex';
-//   }
-// }
 
 // Função para embaralhar uma array
 function shuffle(array) {
@@ -252,8 +221,8 @@ function showQuestions(index) {
   const option_list = document.querySelector(".option_list");
 
   let question = round[index].question;
-  let options = [...round[index].options];
-  // let correctAnswer = round[index].answer;
+  let options = shuffle([...round[index].options]);
+
   // Verifica se há perguntas carregadas
   if (index < round.length) {
     // Criando o HTML para a pergunta
@@ -278,7 +247,7 @@ function showQuestions(index) {
     optionElements.forEach(optionElement => {
       optionElement.addEventListener("click", () => optionSelected(optionElement));
     });
-    // }
+
   }
   if (questions == null) {
     // Exibe uma mensagem se não houver perguntas carregadas ou se o índice estiver fora do alcance
@@ -296,7 +265,6 @@ function optionSelected(answer) {
   clearInterval(counterLine);
   let userAns = answer.querySelector('.question').textContent;
   let correcAns = round[que_count].answer;
-  // const allOptions = option_list.children.length;
 
   if (userAns == correcAns) {
     userScore += 1;
@@ -326,12 +294,13 @@ function showResult() {
   const scoreText = result_box.querySelector(".score_text");
   let iconTag = '<svg data-slot="icon" aria-hidden="true" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 0 1-.982-3.172M9.497 14.25a7.454 7.454 0 0 0 .981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 0 0 7.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 0 0 2.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 0 1 2.916.52 6.003 6.003 0 0 1-5.395 4.972m0 0a6.726 6.726 0 0 1-2.749 1.35m0 0a6.772 6.772 0 0 1-3.044 0" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
   const icon = document.querySelector(".icon");
-  icon.style.color = userScore == questions.length ? "#daa520" : ((userScore == 8 || userScore == 9) ? '#c0c0c0' : (userScore == 7 ? '#CD7F32' : '#0263ca'));
+  icon.style.color = userScore == round.length ? "#daa520" : ((userScore == 8 || userScore == 9) ? '#c0c0c0' : (userScore == 7 ? '#CD7F32' : '#0263ca'));
 
-  let scoreTag = userScore == questions.length ? '<span>Parabéns! Você obteve <p>' + userScore + '</p> de <p>' + questions.length + '</p></span>' :
-    ((userScore == 8 || userScore == 9) ? '<span>Ótimo! Você obteve <p>' + userScore + '</p> de <p>' + questions.length + '</p></span>' :
-      (userScore == 7 ? '<span>Legal, você obteve <p>' + userScore + '</p> de <p>' + questions.length + '</p></span>' :
-        '<span>Desculpa, você obteve apenas <p>' + userScore + '</p> de <p>' + questions.length + '</p></span>'));
+  let scoreTag = userScore == round.length ? '<span>Parabéns! Você obteve <p>' + userScore + '</p> de <p>' + round.length + '</p></span>' :
+    ((userScore == 8 || userScore == 9) ? '<span>Ótimo! Você obteve <p>' + userScore + '</p> de <p>' + round.length + '</p></span>' :
+      (userScore == 7 ? '<span>Legal, você obteve <p>' + userScore + '</p> de <p>' + round.length + '</p></span>' :
+        '<span>Desculpa, você obteve apenas <p>' + userScore + '</p> de <p>' + round.length + '</p></span>'));
+
   icon.innerHTML = iconTag;
   scoreText.innerHTML = scoreTag;
 }
@@ -365,19 +334,7 @@ function startTimer(time) {
   }
 }
 
-// Função para iniciar a linha de tempo
-// function startTimerLine(time) {
-//   counterLine = setInterval(timer, 20);
-//   function timer() {
-//     time += 1;
-//     time_line.style.width = time + "px";
-//     if (time > 549) {
-//       clearInterval(counterLine);
-//     }
-//   }
-// }
 function startTimerLine(duration) {
-  // const time_line = document.querySelector(".time_line"); // Certifique-se de selecionar o elemento correto
   const parentWidth = time_line.parentElement.offsetWidth; // Largura do contêiner pai
   let currentWidth = 0; // Largura inicial da barra
   let interval = 0
@@ -386,22 +343,18 @@ function startTimerLine(duration) {
   }else {
     interval = 58;
   }
-  // Calcula o incremento proporcional para que a barra cresça até 100% em 'duration' milissegundos
-  // const increment = parentWidth * (duration / 20); // Dividido por 20, pois o intervalo é 20ms
 
   counterLine = setInterval(timer, interval); // O intervalo de atualização da largura é de 20ms
 
   function timer() {
     currentWidth += duration; // Aumenta a largura
-    time_line.style.width = currentWidth + "px"; // Atualiza a largura em porcentagem
+    time_line.style.width = currentWidth + "px";
 
     if (currentWidth >= parentWidth) {
       clearInterval(counterLine); // Para quando atingir 100%
     }
   }
 }
-
-
 
 // Função para atualizar o contador de perguntas
 function queCounter(index) {
